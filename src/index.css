@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* @import url("https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@300&display=swap"); */
+@layer components{
+  .btn{
+    @apply px-3 py-1 rounded-md bg-slate-200 hover:bg-slate-300 transition-colors duration-300 ;
+  }
+  .form-control{
+    @apply px-2 py-1 rounded-md focus:outline-none border-2 border-slate-400 border-opacity-50 focus:border-lime-500 focus:caret-lime-600
+  }
+  .container{
+    @apply m-auto
+  }
+}
+:root {
+  --main-color: #0aad0a;
+  --light-color: #f0f3f2;
+  --shadow: rgba(145, 158, 171, 0.2) 0px 2px 4px -1px,
+    rgba(145, 158, 171, 0.14) 0px 4px 5px 0px,
+    rgba(145, 158, 171, 0.12) 0px 1px 10px 0px;
+  --rating-color: #ffc908;
+}
+
+.rating-color {
+  color: var(--rating-color);
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+a,
+a:hover {
+  color: black;
+  text-decoration: none;
+}
+.product:hover {
+  box-shadow: var(--shadow);
+  border: solid 1px var(--main-color);
+}
+.product .btn {
+  transition: transform 1s, opacity 1s;
+  transform: translateY(100%);
+  opacity: 0;
+}
+.product:hover .btn {
+  opacity: 1;
+  transform: translateY(0%);
+}
+.font-sm {
+  font-size: 14px;
+}
+.text-main {
+  color: var(--main-color);
+}
+.bg-main {
+  background-color: var(--main-color) !important;
+}
+.bg-main-light {
+  background-color: var(--light-color) !important;
+}
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.autoplay-progress {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--main-color);
+}
+
+.autoplay-progress svg {
+  --progress: 0;
+  position: absolute;
+  left: 0;
+  top: 0px;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  stroke-width: 4px;
+  stroke: var(--main-color);
+  fill: none;
+  stroke-dashoffset: calc(125.6px * (1 - var(--progress)));
+  stroke-dasharray: 125.6;
+  transform: rotate(-90deg);
+}
+/* Change color of pagination dots */
+.swiper-pagination .swiper-pagination-bullet {
+  background-color: var(--main-color) !important; /* Inactive dots color */
+}
+
+/* Change color of the active pagination dot */
+.swiper-pagination .swiper-pagination-bullet-active {
+  background-color: var(--main-color) !important; /* Active dot color */
+}
+
+/* Move the pagination to the top-center */
+/* Position the pagination below the Swiper slides */
+.swiper-pagination {
+  position: absolute !important;
+  bottom: 0px !important; /* Moves it 30px below the Swiper */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+/* Adjust bottom pagination if needed */
+.swiper-pagination-bottom {
+  bottom: 20px !important;
+  left: 50%;
+  transform: translateX(-50%);
+}
