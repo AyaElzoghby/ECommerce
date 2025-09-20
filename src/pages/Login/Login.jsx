@@ -35,8 +35,8 @@ export default function Login() {
       const loadingToastID = toast.loading("Waiting...");
 
       try {
-        const response = await axios.post("https://linked-posts.routemisr.com/users/signin", values);
-        
+        const response = await axios.post("https://ecommerce.routemisr.com/api/v1/auth/signin", values);
+        console.log(response.data ,'login response')
         if (response.data.message === "success") {
           const userToken = response.data.token; // ✅ Correct way to get token
           
@@ -44,7 +44,6 @@ export default function Login() {
             throw new Error("Token is missing in response");
           }
 
-          localStorage.setItem("token", userToken);
           saveToken(userToken);
 
           toast.dismiss(loadingToastID);

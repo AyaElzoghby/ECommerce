@@ -1,130 +1,138 @@
-import axios from "axios";
 import { createContext, useContext, useState } from "react";
-import toast from "react-hot-toast";
 import { UserContext } from "./User.context";
-
+import axios from "axios";
+import toast from "react-hot-toast";
 export const CartContext = createContext(null);
-
-function CartProvider({ children }) {
+export default function CartProvider({ children }) {
   const { token } = useContext(UserContext);
-
-  const [numOfCartItems, setNumOfCartItems] = useState(0);
   const [cartInfo, setCartInfo] = useState(null);
-  const [totalCartPrice, setTotalCartPrice] = useState(0);
-  const [cartProducts, setCartProducts] = useState(null);
-  const [cartId, setCartId] = useState(0);
-  const [loading, setIsLoading] = useState(false);
-
+  async function AddProductToCart({ productId }) {
+    let toastId = toast.loading("Adding product.... ");
+    try {
+      const options = {
+        url: "https://ecommerce.routemisr.com/api/v1/cart",
+        method: "POST",
+        headers: {
+          token,
+        },
+        data: {
+          productId,
+        },
+      };
+      let { data } = await axios.request(options);
+      if (data.status == "success") {
+        toast.success(data.message);
+      }
+      getCartProducts();
+      console.log(data);
+      console.log("product added seccess");
+    } catch (err) {
+      console.log(err);
+    } finally {
+      toast.dismiss(toastId);
+    }
+  }
   async function getCartProducts() {
     try {
       const options = {
         url: "https://ecommerce.routemisr.com/api/v1/cart",
         method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          token,
+        },
       };
-      const { data } = await axios.request(options);
+      let { data } = await axios.request(options);
       setCartInfo(data);
-    } catch (error) {
-      console.log(error);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      console.log("done");
     }
   }
+  async function RemoveProductFromCart({ productId }) {
+    let toastId = toast.loading("Deleteing product.... ");
 
-  async function AddProductToCart({ productId }) {
     try {
       const options = {
-        url: "https://ecommerce.routemisr.com/api/v1/cart",
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        data: { productId },
-      };
-      console.log("token before request:", token);
-      const { data } = await axios.request(options);
-      toast.success("Product added to cart");
-      await getCartProducts();
-      return data;
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to add product to cart");
-    }
-  }
-
-  async function UpdateProductCount({ id, count }) {
-    try {
-      const options = {
-        url: `https://ecommerce.routemisr.com/api/v1/cart/${id}`,
-        method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        data: { count },
-      };
-      const { data } = await axios.request(options);
-      setNumOfCartItems(data.numOfCartItems);
-      setTotalCartPrice(data.data.totalCartPrice);
-      setCartProducts(data.data.products);
-      setCartId(data.cartId);
-      toast.success("Product quantity updated");
-      return data;
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to update product quantity");
-    }
-  }
-
-  async function RemoveProductFromCart({ id }) {
-    try {
-      const options = {
-        url: `https://ecommerce.routemisr.com/api/v1/cart/${id}`,
+        url: `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          token,
+        },
       };
-      const { data } = await axios.request(options);
-      setNumOfCartItems(data.numOfCartItems);
-      setTotalCartPrice(data.data.totalCartPrice);
-      setCartProducts(data.data.products);
-      setCartId(data.cartId);
-      toast.success("Product removed from cart");
-      return data;
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to remove product");
+      let { data } = await axios.request(options);
+      if (data.status == "success") {
+        setCartInfo(data);
+        toast.success('Product has been deleted');
+      }
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      console.log("done");
+      toast.dismiss(toastId);
     }
   }
-
   async function ClearCart() {
+    let toastId = toast.loading("Deleteing all products.... ");
+
     try {
       const options = {
-        url: "https://ecommerce.routemisr.com/api/v1/cart",
+        url: `https://ecommerce.routemisr.com/api/v1/cart`,
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          token,
+        },
       };
-      await axios.request(options);
-      setNumOfCartItems(0);
-      setTotalCartPrice(0);
-      setCartProducts([]);
-      toast.success("Cart cleared");
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to clear cart");
+      let { data } = await axios.request(options);
+      if (data.status == "success") {
+        setCartInfo({numOfCartItems:0});
+        toast.success('Products has been deleted');
+      }
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      console.log("done");
+      toast.dismiss(toastId);
     }
   }
+  async function UpdateProductCount({productId , count}) {
+    try {
+      const options = {
+        url: `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
+        method: "PUT",
+        headers: {
+          token,
+        },
+        data:{
+          count,
+        }
+      };
+      let { data } = await axios.request(options);
+      // if (data.status == "success") {
+      //   setCartInfo(data);
+      // }
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      console.log("done");
+    }
+  }
+
+
 
   return (
     <CartContext.Provider
       value={{
-        token,
         AddProductToCart,
-        UpdateProductCount,
-        RemoveProductFromCart,
-        ClearCart,
-        numOfCartItems,
-        cartProducts,
-        cartInfo,
-        totalCartPrice,
-        cartId,
-        setCartProducts,
-        setNumOfCartItems,
-        setTotalCartPrice,
         getCartProducts,
-        loading,
+        RemoveProductFromCart,
+        UpdateProductCount,
+        ClearCart,
+        cartInfo,
       }}
     >
       {children}
@@ -132,7 +140,153 @@ function CartProvider({ children }) {
   );
 }
 
-export default CartProvider;
+// import axios from "axios";
+// import { createContext, useContext, useState } from "react";
+// import toast from "react-hot-toast";
+// import { UserContext } from "./User.context";
+
+// export const CartContext = createContext(null);
+
+// function CartProvider({ children }) {
+//   const { token } = useContext(UserContext);
+
+//   const [numOfCartItems, setNumOfCartItems] = useState(0);
+//   const [cartInfo, setCartInfo] = useState(null);
+//   const [totalCartPrice, setTotalCartPrice] = useState(0);
+//   const [cartProducts, setCartProducts] = useState(null);
+//   const [cartId, setCartId] = useState(0);
+//   const [loading, setIsLoading] = useState(false);
+
+//   async function getCartProducts() {
+//     try {
+//       const options = {
+//         url: "https://ecommerce.routemisr.com/api/v1/cart",
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       };
+//       const { data } = await axios.request(options);
+//       setCartInfo(data);
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+
+//   async function AddProductToCart({ productId }) {
+//     try {
+//       const options = {
+//         url: "https://ecommerce.routemisr.com/api/v1/cart",
+//         method: "POST",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//         data: { productId },
+//       };
+//       console.log("Headers sent:", options.headers);
+
+//       console.log("token before request:", token);
+//       const { data } = await axios.request(options);
+//       toast.success("Product added to cart");
+//       await getCartProducts();
+//       return data;
+//     } catch (error) {
+//       console.log(error);
+//       toast.error("Failed to add product to cart");
+//     }
+//   }
+
+//   async function UpdateProductCount({ id, count }) {
+//     try {
+//       const options = {
+//         url: `https://ecommerce.routemisr.com/api/v1/cart/${id}`,
+//         method: "PUT",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//         data: { count },
+//       };
+//       const { data } = await axios.request(options);
+//       setNumOfCartItems(data.numOfCartItems);
+//       setTotalCartPrice(data.data.totalCartPrice);
+//       setCartProducts(data.data.products);
+//       setCartId(data.cartId);
+//       toast.success("Product quantity updated");
+//       return data;
+//     } catch (error) {
+//       console.log(error);
+//       toast.error("Failed to update product quantity");
+//     }
+//   }
+
+//   async function RemoveProductFromCart({ id }) {
+//     try {
+//       const options = {
+//         url: `https://ecommerce.routemisr.com/api/v1/cart/${id}`,
+//         method: "DELETE",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       };
+//       const { data } = await axios.request(options);
+//       setNumOfCartItems(data.numOfCartItems);
+//       setTotalCartPrice(data.data.totalCartPrice);
+//       setCartProducts(data.data.products);
+//       setCartId(data.cartId);
+//       toast.success("Product removed from cart");
+//       return data;
+//     } catch (error) {
+//       console.log(error);
+//       toast.error("Failed to remove product");
+//     }
+//   }
+
+//   async function ClearCart() {
+//     try {
+//       const options = {
+//         url: "https://ecommerce.routemisr.com/api/v1/cart",
+//         method: "DELETE",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       };
+//       await axios.request(options);
+//       setNumOfCartItems(0);
+//       setTotalCartPrice(0);
+//       setCartProducts([]);
+//       toast.success("Cart cleared");
+//     } catch (error) {
+//       console.log(error);
+//       toast.error("Failed to clear cart");
+//     }
+//   }
+
+//   return (
+//     <CartContext.Provider
+//       value={{
+//         token,
+//         AddProductToCart,
+//         UpdateProductCount,
+//         RemoveProductFromCart,
+//         ClearCart,
+//         numOfCartItems,
+//         cartProducts,
+//         cartInfo,
+//         totalCartPrice,
+//         cartId,
+//         setCartProducts,
+//         setNumOfCartItems,
+//         setTotalCartPrice,
+//         getCartProducts,
+//         loading,
+//       }}
+//     >
+//       {children}
+//     </CartContext.Provider>
+//   );
+// }
+
+// export default CartProvider;
 
 // import axios from "axios";
 // import { createContext, useContext, useState } from "react";

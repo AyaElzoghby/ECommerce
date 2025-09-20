@@ -11,7 +11,7 @@ export default function Home() {
   const [products, setProducts] = useState(null);
   async function getProducts() {
     const options = {
-      url: "https:/ecommerce.routemisr.com/api/v1/products",
+      url: "https://ecommerce.routemisr.com/api/v1/products",
       method: "GET",
     };
     let { data } = await axios.request(options);
@@ -31,7 +31,7 @@ export default function Home() {
         <CategorySlider/>
         <div className="grid gap-6 lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
           {products.map((product) => (
-            <Card key={product.id} productInfo={product}/>
+            <Card key={product._id} productInfo={product}/>
           ))}
         </div>
         </>

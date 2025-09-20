@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import UserProvider from "./context/User.context";
 import CartProvider from "./context/Cart.context";
 import Cart from "./pages/Cart/Cart";
+import Orders from "./pages/Orders/Orders";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Checkout from "./pages/Checkout/Checkout";
 import GuestRoute from "./components/GuestRoute/GuestRoute";
@@ -23,8 +24,9 @@ export default function App() {
       ),
       children: [
         { index: true, element: <Home /> },
-        { path: "Cart", element: <Cart /> },
+        { path: "cart", element: <Cart /> },
         { path: "Checkout", element: <Checkout /> },
+        { path: "allorders", element: <Orders /> },
         { path: "ProductDetails/:id", element: <ProductDetails /> },
       ],
     },

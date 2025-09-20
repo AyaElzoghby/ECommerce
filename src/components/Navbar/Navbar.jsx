@@ -23,15 +23,14 @@ export default function Navbar() {
   const { token, clearToken } = useContext(UserContext);
   const { cartInfo, getCartProducts } = useContext(CartContext);
 
-  // Fetch cart data whenever token changes or when the component mounts
   useEffect(() => {
     if (token) {
-      getCartProducts(); // Fetch the cart when logged in
+      getCartProducts();
     }
-  }, [token, getCartProducts]); // Depend on token to refetch cart if user logs in
+  }, []);
 
   return (
-    <nav className="bg-slate-100 py-2 shadow px-40 fixed top-0 right-0 left-0 z-50">
+    <nav className="bg-slate-100 py-2 shadow-md px-40 fixed top-0 right-0 left-0 z-50">
       <div className="justify-center flex items-center gap-8 py-1 px-2">
         <NavLink to="">
           <img src={freshCart} alt="freshCart" />
@@ -44,7 +43,9 @@ export default function Navbar() {
               <li>
                 <NavLink
                   className={({ isActive }) =>
-                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${isActive ? "before:!w-full font-tmedium" : ""}`
+                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${
+                      isActive ? "before:!w-full font-tmedium" : ""
+                    }`
                   }
                   to="/"
                 >
@@ -54,9 +55,11 @@ export default function Navbar() {
               <li>
                 <NavLink
                   className={({ isActive }) =>
-                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${isActive ? "before:!w-full font-tmedium" : ""}`
+                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${
+                      isActive ? "before:!w-full font-tmedium" : ""
+                    }`
                   }
-                  to="/Cart"
+                  to="/cart"
                 >
                   Cart
                 </NavLink>
@@ -64,7 +67,9 @@ export default function Navbar() {
               <li>
                 <NavLink
                   className={({ isActive }) =>
-                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${isActive ? "before:!w-full font-tmedium" : ""}`
+                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${
+                      isActive ? "before:!w-full font-tmedium" : ""
+                    }`
                   }
                   to="/Products"
                 >
@@ -74,7 +79,9 @@ export default function Navbar() {
               <li>
                 <NavLink
                   className={({ isActive }) =>
-                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${isActive ? "before:!w-full font-tmedium" : ""}`
+                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${
+                      isActive ? "before:!w-full font-tmedium" : ""
+                    }`
                   }
                   to="/Categories"
                 >
@@ -84,7 +91,9 @@ export default function Navbar() {
               <li>
                 <NavLink
                   className={({ isActive }) =>
-                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${isActive ? "before:!w-full font-tmedium" : ""}`
+                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${
+                      isActive ? "before:!w-full font-tmedium" : ""
+                    }`
                   }
                   to="/Brands"
                 >
@@ -94,9 +103,11 @@ export default function Navbar() {
               <li>
                 <NavLink
                   className={({ isActive }) =>
-                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${isActive ? "before:!w-full font-tmedium" : ""}`
+                    `relative before:absolute before:w-0 before:h-0.5 before:bg-mainColor-500 before:left-0 before:-bottom-1 hover:before:w-full before:transition-[width] before:duration-300 ${
+                      isActive ? "before:!w-full font-tmedium" : ""
+                    }`
                   }
-                  to="/Orders"
+                  to="/allorders"
                 >
                   Orders
                 </NavLink>
@@ -104,7 +115,10 @@ export default function Navbar() {
             </ul>
 
             {/* Shopping Cart */}
-            <Link to={"/Cart"} className="cart relative ml-auto cursor-pointer text-lg">
+            <Link
+              to={"/cart"}
+              className="cart relative ml-auto cursor-pointer text-lg"
+            >
               <FontAwesomeIcon icon={faCartShopping} />
               <div className="cart-counter absolute right-0 top-0 rounded-xl h-4 w-4 flex items-center justify-center bg-mainColor-500 text-white translate-x-1/2 -translate-y-1/2">
                 {cartInfo ? (
@@ -112,7 +126,7 @@ export default function Navbar() {
                     {cartInfo.numOfCartItems}
                   </span>
                 ) : (
-                  <FontAwesomeIcon icon={faSpinner} spin className="text-sm" />
+                  <i className="fa-solid fa-spinner fa-spin text-xs"></i>
                 )}
               </div>
             </Link>
@@ -167,7 +181,10 @@ export default function Navbar() {
           ) : (
             <li onClick={clearToken}>
               <NavLink to="">
-                <FontAwesomeIcon icon={faRightFromBracket} className="text-lg" />
+                <FontAwesomeIcon
+                  icon={faRightFromBracket}
+                  className="text-lg"
+                />
               </NavLink>
             </li>
           )}

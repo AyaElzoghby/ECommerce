@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 
 function Card({productInfo}) {
- const {imageCover, title, price,category ,description ,ratingsAverage ,id}=productInfo
+ const {imageCover, title, price,category ,description ,ratingsAverage ,_id}=productInfo
  const {AddProductToCart}=useContext(CartContext)
   return (
     <>
@@ -15,17 +15,17 @@ function Card({productInfo}) {
             <div className="icon cursor-pointer w-8 h-8 flex justify-center items-center rounded-full bg-mainColor-400 text-white">
               <i className="fas fa-heart"></i>
             </div>
-            <div onClick={()=>{AddProductToCart({productId :id})}} className="icon cursor-pointer w-8 h-8 flex justify-center items-center rounded-full bg-mainColor-400 text-white">
+            <div onClick={()=>{AddProductToCart({productId :_id})}} className="icon cursor-pointer w-8 h-8 flex justify-center items-center rounded-full bg-mainColor-400 text-white">
               <i className="fas fa-cart-shopping"></i>
             </div>
-            <Link to={`/ProductDetails/${id}`} className="icon cursor-pointer w-8 h-8 flex justify-center items-center rounded-full bg-mainColor-400 text-white">
+            <Link to={`/ProductDetails/${_id}`} className="icon cursor-pointer w-8 h-8 flex justify-center items-center rounded-full bg-mainColor-400 text-white">
               <i className="fas fa-eye"></i>
             </Link>
           </div>
         </div>
         <div className="card-body p-4 space-y-3">
           <header>
-            <h3 className="text-lg text-gray-600 font-tmedium line-clamp-1"><Link to={`/ProductDetails/${id}`}>{title}</Link></h3>
+            <h3 className="text-lg text-gray-600 font-tmedium line-clamp-1"><Link to={`/ProductDetails/${_id}`}>{title}</Link></h3>
             <h4 className=" text-mainColor-500 font-semibold">{category.name}</h4>
           </header>
           <p className="text-sm text-gray-500 line-clamp-2">{description}</p>

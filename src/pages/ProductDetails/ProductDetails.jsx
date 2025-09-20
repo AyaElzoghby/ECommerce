@@ -19,7 +19,7 @@ function ProductDetails() {
         url: `https://ecommerce.routemisr.com/api/v1/products/${id}`,
         method: "GET",
       };
-      let { data } = await axios.Axios.request(options);
+      let { data } = await axios.request(options);
       setProductDetails(data.data);
       console.log(data);
     } catch (error) {
@@ -33,7 +33,7 @@ function ProductDetails() {
         url: `https://ecommerce.routemisr.com/api/v1/products?category[in]=${ProductDetails.category._id}`,
         method: "GET",
       };
-      let { data } = await axios.Axios.request(options);
+      let { data } = await axios.request(options);
       setRelatedProducts(data.data);
       console.log(data);
     } catch (error) {
@@ -65,8 +65,6 @@ function ProductDetails() {
                   };
                 })}
               />
-
-              <img src={ProductDetails.imageCover} alt="" className="w-full" />
             </div>
             <div className="col-span-9 space-y-4">
               <div className="">
@@ -81,7 +79,7 @@ function ProductDetails() {
               <div className="flex justify-between items-center">
                 <span>{ProductDetails.price}</span>
                 <div className="flex gap-3 items-center">
-                  <i className="fa-solid fa-star"></i>
+                  <i className="fa-solid fa-star mr-2 text-yellow-500"></i>
                   <span>{ProductDetails.ratingsAverage}</span>
                 </div>
               </div>
@@ -96,18 +94,22 @@ function ProductDetails() {
             </div>
           </section>
           <section>
-            <h2 className="text-2xl font-tmedium text-gray-600 mt-12 mb-6">Related Products</h2>
-            {relatedProducts ? (
-              <Swiper slidesPerView={6} spaceBetween={15}>
-                {relatedProducts.map((product) => (
-                  <SwiperSlide key={product.id}>
-                    <Card productInfo={product}/>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            ) : (
-              <Loading />
-            )}
+            <h2 className="text-2xl font-tmedium text-gray-600 mt-12 mb-6">
+              Related Products
+            </h2>
+            <div className="py-2">
+              {relatedProducts ? (
+                <Swiper slidesPerView={6} spaceBetween={15}>
+                  {relatedProducts.map((product) => (
+                    <SwiperSlide key={product.id}>
+                      <Card productInfo={product} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <Loading />
+              )}
+            </div>
           </section>
         </>
       ) : (
